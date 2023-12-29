@@ -1,0 +1,73 @@
+﻿@page "/animal"
+@rendermode InteractiveServer
+
+<PageTitle>Animal</PageTitle>
+
+@if (!isWin)
+{
+    @if (step == 0)
+    {
+        <h1 class="text-center">Ко је морски пас?</h1>
+
+        <div class="images_row">
+            <img src="https://fikiwiki.com/uploads/posts/2022-02/1644902848_30-fikiwiki-com-p-begemoti-krasivie-kartinki-31.jpg" class='roundcornerimg' @onclick="IncrementCount" />
+            <img src="https://img2.uquiz.com/content/images/personalities/personality_images/751018_1672942711_45419f37-7488-45a5-81b6-2c4687944a1c.jpg" class='roundcornerimg' @onclick="IncrementCount" />
+            <img src="msg1456385234-32034.jpg" class='roundcornerimg' @onclick="NextStep" />
+            <img src="https://cherepah.ru/wp-content/uploads/e/c/6/ec650bedf5cf3cc1f8d5de3de4c2cd2a.jpeg" class='roundcornerimg' @onclick="IncrementCount" />
+        </div>
+    }
+    else if (step == 1)
+    {
+        <h1 class="text-center">Ко је нилски коњ?</h1>
+
+        <div class="images_row">
+            <img src="https://m-ikea.ru/wp-content/uploads/2023/04/snimok-ekrana-2023-04-08-v-23.11.06-1024x965.jpg" class='roundcornerimg' @onclick="IncrementCount" />
+            <img src="https://3fc4ed44-3fbc-419a-97a1-a29742511391.selcdn.net/coub_storage/coub/simple/cw_image/ea95c48bc65/4bd6fda9245088d6d79c3/1585686678_00045.jpg" class='roundcornerimg' @onclick="IncrementCount" />
+            <img src="msg1456385234-32035.jpg" class='roundcornerimg' @onclick="IncrementCount" />
+            <img src="https://w.forfun.com/fetch/b9/b938055e3a8323c0ba46e07c474d0c2f.jpeg" class='roundcornerimg' @onclick="NextStep" />
+        </div>
+    }
+    else if (step >= 2)
+    {
+        <h1 class="text-center">Ко је најлепши?</h1>
+
+        <div class="images_row">
+            <img src="https://i.pinimg.com/originals/5d/7a/74/5d7a740422758d4006a372738f307724.jpg" class='roundcornerimg' @onclick="NextStep" />
+            <img src="https://animepersona.com/wp-content/uploads/2022/11/1669156686707.jpg" class='roundcornerimg' @onclick="NextStep" />
+            <img src="msg1456385234-32036.jpg" class='roundcornerimg' @onclick="NextStep" />
+            <img src="https://kinmeduch.ru/wp-content/uploads/e/0/8/e08fee31eb220fb657ead83e634354eb.jpeg" class='roundcornerimg' @onclick="NextStep" />
+        </div>
+    }
+
+    <p class=@(currentCount == 0 ? "link-warning text-center display_none" : "link-warning text-center")>Преостали покушаји: @currentCount</p>
+}
+else
+{
+    <p class="text-center">Ви сте @(isSuper ? "тачно" : "") најпаметнији детектив!</p>
+    <p class="text-center">Идите на најлепше место у дневној собе</p>
+}
+
+@code {
+    private int step = 0;
+    private int currentCount = 0;
+    private bool isWin = false;
+    private bool isSuper = false;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private void NextStep()
+    {
+        if (step >= 2)
+        {
+            isWin = true;
+            if (step >= 5)
+            {
+                isSuper = true;
+            }
+        }
+        step++;
+    }
+}

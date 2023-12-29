@@ -1,0 +1,100 @@
+﻿@page "/"
+@page "/dragonborn"
+@rendermode InteractiveServer
+@inject IJSRuntime JsRuntime
+
+@if (!isWin)
+{
+    <h1 class="text-center">Miraak has returned!</h1>
+
+    <div class="characters_row">
+        <img src="http://yesofcorsa.com/wp-content/uploads/2017/07/Frogs-And-Flowers-Photo.jpg" />
+        <div></div>
+        <img src="https://celes.club/uploads/posts/2023-03/1679503892_celes-club-p-skairim-mirak-art-krasivo-29.jpg" />
+    </div>
+    <div class="buttons_row">
+        <div>
+            <h3 class="text-center text-danger">Health: @playerHealth</h3>
+            <div class="player_buttons_column">
+                <button class="btn btn-info swift_strike" disabled=@isWaiting @onclick="SwiftStrike">Swift stike</button>
+                <button class="btn btn-primary powerful_smash" disabled=@isWaiting @onclick="PowerfulSmash">Powerful smash</button>
+                @if (playerHealth < 60)
+                {
+                    <button class="btn btn-info debug" disabled=@isWaiting @onclick="Info">Debug for fast win</button>
+                }
+            </div>
+        </div>
+        <div>
+            @if (miraakHealth == 5)
+            {
+                <h2 class="text-center text-danger">Critical blow!</h2>
+            }
+        </div>
+        <div>
+            <h3 class="text-center text-danger">Health: @miraakHealth</h3>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-center">Go down, right to Miraak's grave</p>
+    <p class="text-center">Find a next step of your journey</p>
+}
+
+@code {
+    private int playerHealth = 100;
+    private int miraakHealth = 999;
+    private bool isWaiting = false;
+    private bool isWin = false;
+
+    private async Task SwiftStrike()
+    {
+        if (miraakHealth <= 5)
+        {
+            isWin = true;
+            return;
+        }
+
+        if (playerHealth < 20)
+        {
+            miraakHealth = 5;
+        }
+        else
+        {
+            miraakHealth -= Random.Shared.Next(10, 25);
+            playerHealth -= Random.Shared.Next(5, 15);
+        }
+
+        isWaiting = true;
+        await Task.Delay(1000);
+        isWaiting = false;
+    }
+
+    private async Task PowerfulSmash()
+    {
+        if (miraakHealth <= 5)
+        {
+            isWin = true;
+            return;
+        }
+
+        if (playerHealth < 20)
+        {
+            miraakHealth = 5;
+        }
+        else
+        {
+            miraakHealth -= Random.Shared.Next(50, 150);
+            playerHealth -= Random.Shared.Next(10, 25);
+        }
+
+        isWaiting = true;
+        await Task.Delay(1000);
+        isWaiting = false;
+    }
+
+    private async Task Info()
+    {
+        await JsRuntime.InvokeVoidAsync("alert", "Our game doesn't have any bugs... So you shouldn't use debug for fast win");
+    }
+}

@@ -1,0 +1,68 @@
+﻿@* @page "/" *@
+
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>Home</PageTitle>
+
+@if (!isReady)
+{
+    <p role="status" class="text-center">Нужно кликать как можно быстрее на кнопку</p>
+
+    <button class="btn btn-primary" @onclick="IncrementCount">@btnTitle</button>
+}
+else
+{
+    if (!isSpinnerShow)
+    {
+        <h1 class="text-center">Завелось</h1>
+    }
+    else
+    {
+        <h1 class="text-center">Ждём...</h1>
+        <span class="loader align-content-center"></span>
+
+        if (isNextStepReady)
+        {
+            <hr class="invisible" />
+            <p class="text-center">Идите в место, в котором приятно ждать, обсуждать, созерцать. Ищите следующий шаг</p>
+        }
+    }
+}
+@code {
+    private string btnTitle = "Начнем!";
+    private bool isReady = false;
+    private bool isSpinnerShow = false;
+    private bool isNextStepReady = false;
+    private int currentCount = 0;
+
+    private async Task IncrementCount()
+    {
+        currentCount++;
+
+        if (currentCount > 0)
+        {
+            isReady = true;
+            isSpinnerShow = true;
+
+            await Task.Delay(1000);
+            isNextStepReady = true;
+        }
+        else if (currentCount > 25)
+        {
+            btnTitle = "БЫСТРЕЕ БЫСТРЕЕ БЫСТРЕЕ";
+        }
+        else if (currentCount > 10)
+        {
+            btnTitle = "Еще быстрее...";
+        }
+        else if (currentCount > 5)
+        {
+            btnTitle = "Быстрее";
+        }
+        else if (currentCount > 0)
+        {
+            btnTitle = "Клик клик";
+        }
+    }
+}
